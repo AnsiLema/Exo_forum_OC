@@ -47,7 +47,7 @@ class User:
         if file:
             post = FilePost(self, "aujourd'hui", content, file)
         else:
-            post = Post(user=self, time_posted="auisourd'hui",content=content)
+            post = Post(user=self, time_posted="aujourd'hui",content=content)
             thread.add_post(post)
             return post
 
@@ -68,8 +68,8 @@ class Moderator(User):
 
     def delete(self, thread, post):
         """supprimer un message"""
-        index = thread.posts.index(post)
-        del thread.posts[index]
+        index = thread.post.index(post)
+        del thread.post[index]
 
 
 class Post:
@@ -83,7 +83,7 @@ class Post:
 
     def display(self):
         """affiche le message"""
-        print(f"Message posté par {self.user} le {self.time_posted}. ")
+        print(f"Message posté par {self.user}, {self.time_posted}. ")
         print(self.content)
 
 
@@ -118,16 +118,48 @@ class Thread:
         print("----- THREAD -----")
         print(f"titre: {self.title}, date: {self.time_posted}")
         print()
-        for post in self.posts:
+        for post in self.post:
             post.display()
             print()
         print("------------------")
 
     def add_post(self, post):
         """Ajoute un post."""
-        self.posts.append(post)
+        self.post.append(post)
 
+#Création de l'utilisateur
+user = User("Margritt", "Bonbon")
+"""créé le nouvel utilisateur"""
 
+#Création du modérateur
+moderator = Moderator("Ansi", "JaelynHaylee")
+"""créé le nouveau modérateur"""
+
+#Création du fil de discussion par l'utilisateur
+thread = Thread("Gare aux Gorilles", "Aujourd'hui", Post(user, "aujourd'hui", "Le gorille des montagne est un animal fascinant, de nature calme et pacifique, il n'en demeure pas moins un animal très dangeureux."))
+thread.display()
+
+#Réponse par le modérateur
+moderator_post = moderator.post(thread, "Merci pour ce sujet très intéressant, Margritt !" )
+thread.display()
+
+#Message hors-sujet de l'utilisateur
+off_topic_post = user.post(thread, "Voilà donc la fameuse recette du gateau au chocolat! ")
+thread.display()
+
+#Réponse au message hors-sujet
+off_topic_response_post = moderator.post(thread, "Ce message est hors-sujet et n'a rien à faire dans le fil de discussion suivant. ")
+thread.display()
+
+#Suppression du message HS et de l'avertissement
+moderator.delete(thread, off_topic_post)
+moderator.delete(thread, off_topic_response_post)
+thread.display()
+
+#Réponse utilisateur avec une image
+image_file = ImageGIF("image_funny.gif", "340")
+user.post(thread, "Voici une image rigolote !", file=image_file)
+thread.display()
 
 
 
