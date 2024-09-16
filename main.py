@@ -1,7 +1,6 @@
-from tkinter.font import names
+from abc import ABC
 
-
-class File:
+class File(ABC):
     """Fichier"""
     def __init__(self, name, size):
         self.name = name
@@ -9,11 +8,27 @@ class File:
 
     def display(self):
         """Affiche le fichier"""
-        print(f"fichier {self.name}")
+        pass
 
 class ImageFile(File):
     """Fichier Image"""
-    pass
+    def display(self):
+        print(f"fichier {self.name}")
+
+
+class ImageGIF(ImageFile):
+    """fichier image GIF"""
+    def display(self):
+        super().display()
+        print("L'image est de type .gif ")
+
+class ImageJPG(ImageFile):
+    """fichier image JPG"""
+
+    def display(self):
+        super().display()
+        print("L'image est de type .jpg ")
+
 
 
 class User:
